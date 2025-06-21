@@ -40,8 +40,19 @@ console.log("✅ content.js injected (safe version)");
     chatInput.id = "chat-input";
     chatInput.placeholder = "Type message...";
 
-    chatBox.appendChild(chatLog);
-    chatBox.appendChild(chatInput);
+    const sendButton = document.createElement("button");
+    sendButton.id = "chat-send";
+    sendButton.textContent = "Send";
+
+
+    const chatInputRow = document.createElement("div");
+chatInputRow.id = "chat-input-row";
+chatInputRow.appendChild(chatInput);
+chatInputRow.appendChild(sendButton);
+
+chatBox.appendChild(chatLog);
+chatBox.appendChild(chatInputRow);
+
 
     hud.appendChild(emoteBar);
     hud.appendChild(chatBox);
@@ -118,6 +129,34 @@ console.log("✅ content.js injected (safe version)");
       @keyframes fade-out {
         to { opacity: 0; transform: translateY(-50px); }
       }
+
+      #chat-input-row {
+  display: flex;
+  gap: 4px;
+}
+
+#chat-send {
+  background: #00a86b; /* Verde de chess.com */
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#chat-send:hover {
+  background: #007a52;
+}
+  #chessmotes-hud {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: move; /* para que se vea que se puede mover */
+}
+
+
     `;
     document.head.appendChild(style);
 
@@ -129,6 +168,29 @@ console.log("✅ content.js injected (safe version)");
     "nigga", "nigger", "faggot", "fag", "retard", "spic", "kike", "tranny", "chink",
     "maricon", "culero", "joto", "perra", "cabron", "zorra", "imbecil"
   ];
+
+let isDragging = false;
+let offsetX, offsetY;
+
+hud.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  offsetX = e.clientX - hud.getBoundingClientRect().left;
+  offsetY = e.clientY - hud.getBoundingClientRect().top;
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    hud.style.left = `${e.clientX - offsetX}px`;
+    hud.style.top = `${e.clientY - offsetY}px`;
+    hud.style.right = "auto";
+    hud.style.bottom = "auto";
+  }
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
 
   let clean = text;
   badWords.forEach(word => {
@@ -166,6 +228,18 @@ console.log("✅ content.js injected (safe version)");
         console.error("❌ Error dispatching emote image:", e);
       }
     });
+
+    sendButton.addEventListener("click", () => {
+  if (chatInput.value.trim()) {
+    const msg = censor(chatInput.value.trim());
+    const msgElem = document.createElement("div");
+    msgElem.textContent = "You: " + msg;
+    chatLog.appendChild(msgElem);
+    chatInput.value = "";
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+});
+
 
     [emote1, emote2].forEach(img => {
   img.onclick = () => {
