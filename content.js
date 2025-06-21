@@ -167,7 +167,8 @@ chatBox.appendChild(chatInputRow);
   const badWords = [
     "fuck", "shit", "bitch", "idiot", "ass", "pendejo", "puto", "puta", "mierda",
     "nigga", "nigger", "faggot", "fag", "retard", "spic", "kike", "tranny", "chink",
-    "maricon", "culero", "joto", "perra", "cabron", "zorra", "imbecil"
+    "maricon", "culero", "joto", "perra", "cabron", "zorra", "imbecil", "pene", "pito",
+    "sexo", "anal", "verga", "maldito", "idiota", "down", "nebro"
   ];
 
 let isDragging = false;
@@ -256,7 +257,7 @@ window.addEventListener('send-emote', (e) => {
 });
 
 
-    console.log("✅ HUD inserted into DOM");
+    console.log("✅ HUD insertado en el DOM (Ya debería de aparecer pibe que está chequeando la consola)");
   }
 
   const interval = setInterval(() => insertHUD(), 1000);
