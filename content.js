@@ -1,10 +1,10 @@
 console.log("✅ content.js injected (safe version)");
 
-window.addEventListener("DOMContentLoaded", () => {
+(function () {
   function insertHUD() {
     if (document.querySelector("#chessmotes-hud")) return;
 
-    const container = document.querySelector(".board-layout-component") || document.body;
+    const container = document.body;
     if (!container) return;
 
     const hud = document.createElement("div");
@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
       emote1.src = chrome.runtime.getURL("emotes/emote1.png");
       emote2.src = chrome.runtime.getURL("emotes/emote2.png");
     } catch (e) {
-      console.error("❌ Error getting emote image URL:", e);
+      console.error("❌ Error loading emotes", e);
       return;
     }
 
@@ -121,15 +121,24 @@ window.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
 
-    const badWords = ['fuck', 'shit', 'bitch', 'idiot', 'ass', 'pendejo', 'puto'];
+
+
     function censor(text) {
-      let clean = text;
-      badWords.forEach(word => {
-        const regex = new RegExp(word, 'gi');
-        clean = clean.replace(regex, '*'.repeat(word.length));
-      });
-      return clean;
-    }
+  const badWords = [
+    "fuck", "shit", "bitch", "idiot", "ass", "pendejo", "puto", "puta", "mierda",
+    "nigga", "nigger", "faggot", "fag", "retard", "spic", "kike", "tranny", "chink",
+    "maricon", "culero", "joto", "perra", "cabron", "zorra", "imbecil"
+  ];
+
+  let clean = text;
+  badWords.forEach(word => {
+    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+    clean = clean.replace(regex, '*'.repeat(word.length));
+  });
+
+  return clean;
+}
+
 
     chatInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && chatInput.value.trim()) {
@@ -159,14 +168,24 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     [emote1, emote2].forEach(img => {
-      img.onclick = () => {
-        const emote = img.dataset.emote;
-        window.dispatchEvent(new CustomEvent('send-emote', { detail: emote }));
-      };
-    });
+  img.onclick = () => {
+    const emote = img.dataset.emote;
+
+    // Emitir evento local
+    window.dispatchEvent(new CustomEvent('send-emote', { detail: emote }));
+
+    // Mostrar emote flotante
+    const imgEl = document.createElement("img");
+    imgEl.src = chrome.runtime.getURL(`emotes/${emote}.png`);
+    imgEl.className = "emote";
+    document.body.appendChild(imgEl);
+    setTimeout(() => imgEl.remove(), 3000);
+  };
+});
+
 
     console.log("✅ HUD inserted into DOM");
   }
 
   const interval = setInterval(() => insertHUD(), 1000);
-});
+})();

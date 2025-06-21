@@ -1,18 +1,31 @@
-
 {
   "manifest_version": 3,
-  "name": "Chessmotes HUD + Chat",
-  "description": "Emotes and in-game chat for chess.com",
-  "version": "1.0",
-  "permissions": ["storage", "activeTab", "scripting"],
-  "background": {
-    "service_worker": "background.js"
-  },
+  "name": "Chessmotes",
+  "version": "1.1",
+  "description": "Send fun emotes and messages during Chess.com matches!",
+  "permissions": [],
+  "host_permissions": [
+    "*://*.chess.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*.chess.com/*"],
-      "js": ["content.js"],
-      "css": ["styles.css"]
+      "matches": [
+        "*://*.chess.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "emotes/*.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }
