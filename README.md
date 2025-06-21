@@ -2,7 +2,7 @@
 
 Bring fun and flair to your Chess.com games with **Chessmotes** — a Chrome extension that lets you send Clash Royale–style emotes and messages during matches!
 
-![screenshot](https://raw.githubusercontent.com/youruser/chessmotes/main/assets/demo.png) <!-- opcional si haces una imagen demo -->
+(placeholder de una screenshot)
 
 ---
 
@@ -52,6 +52,8 @@ MIT — feel free to fork, improve, or customize!
 # ♟️ Chessmotes (Español)
 
 Trae diversión y expresividad a tus partidas en Chess.com con **Chessmotes** — una extensión de Chrome que permite enviar emotes estilo Clash Royale y mensajes durante la partida.
+
+(placeholder de una screenshot)
 
 ---
 
