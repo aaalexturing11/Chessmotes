@@ -113,14 +113,15 @@ chatBox.appendChild(chatInputRow);
         font-size: 12px;
       }
       .emote {
-        position: fixed;
-        bottom: 100px;
-        right: 20px;
-        width: 64px;
-        height: 64px;
-        animation: pop-up 0.5s ease, fade-out 0.5s ease 2.5s;
-        z-index: 99999;
-      }
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  animation: pop-up 0.5s ease, fade-out 0.5s ease 2.5s;
+  z-index: 99999;
+}
+
       @keyframes pop-up {
         0% { transform: scale(0); opacity: 0; }
         50% { transform: scale(1.2); opacity: 1; }
@@ -214,20 +215,17 @@ document.addEventListener("mouseup", () => {
     });
 
     const emoteBox = document.createElement("div");
-    emoteBox.id = "emote-box";
-    document.body.appendChild(emoteBox);
+emoteBox.id = "emote-box";
+hud.appendChild(emoteBox); // ahora está dentro del HUD
 
-    window.addEventListener('send-emote', (e) => {
-      const img = document.createElement("img");
-      try {
-        img.src = chrome.runtime.getURL(`emotes/${e.detail}.png`);
-        img.className = "emote";
-        emoteBox.appendChild(img);
-        setTimeout(() => img.remove(), 3000);
-      } catch (e) {
-        console.error("❌ Error dispatching emote image:", e);
-      }
-    });
+window.addEventListener('send-emote', (e) => {
+  const img = document.createElement("img");
+  img.src = chrome.runtime.getURL(`emotes/${e.detail}.png`);
+  img.className = "emote";
+  emoteBox.appendChild(img);
+  setTimeout(() => img.remove(), 3000);
+});
+
 
     sendButton.addEventListener("click", () => {
   if (chatInput.value.trim()) {
