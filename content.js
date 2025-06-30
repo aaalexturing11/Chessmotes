@@ -46,12 +46,13 @@ console.log("✅ content.js injected (safe version)");
 
 
     const chatInputRow = document.createElement("div");
-chatInputRow.id = "chat-input-row";
-chatInputRow.appendChild(chatInput);
-chatInputRow.appendChild(sendButton);
 
-chatBox.appendChild(chatLog);
-chatBox.appendChild(chatInputRow);
+    chatInputRow.id = "chat-input-row";
+    chatInputRow.appendChild(chatInput);
+    chatInputRow.appendChild(sendButton);
+
+    chatBox.appendChild(chatLog);
+    chatBox.appendChild(chatInputRow);
 
 
     hud.appendChild(emoteBar);
@@ -113,14 +114,14 @@ chatBox.appendChild(chatInputRow);
         font-size: 12px;
       }
       .emote {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 64px;
-  height: 64px;
-  animation: pop-up 0.5s ease, fade-out 0.5s ease 2.5s;
-  z-index: 99999;
-}
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 64px;
+        height: 64px;
+        animation: pop-up 0.5s ease, fade-out 0.5s ease 2.5s;
+        z-index: 99999;
+      }
 
       @keyframes pop-up {
         0% { transform: scale(0); opacity: 0; }
@@ -132,103 +133,106 @@ chatBox.appendChild(chatInputRow);
       }
 
       #chat-input-row {
-  display: flex;
-  gap: 4px;
-}
+        display: flex;
+        gap: 4px;
+      }
 
-#chat-send {
-  background: #00a86b; /* Verde de chess.com */
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+      #chat-send {
+        background: #00a86b; /* Verde de chess.com */
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
 
-#chat-send:hover {
-  background: #007a52;
-}
-  #chessmotes-hud {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  cursor: move; /* para que se vea que se puede mover */
-}
-
+      #chat-send:hover {
+        background: #007a52;
+      }
+      
+      #chessmotes-hud {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        cursor: move; /* Esto hace lo del drag n' drop */
+    }
 
     `;
+    
     document.head.appendChild(style);
 
 
 
     function censor(text) {
-  const badWords = [
+    const badWords = [
     "fuck", "shit", "bitch", "idiot", "ass", "pendejo", "puto", "puta", "mierda",
     "nigga", "nigger", "faggot", "fag", "retard", "spic", "kike", "tranny", "chink",
     "maricon", "culero", "joto", "perra", "cabron", "zorra", "imbecil", "pene", "pito",
-    "sexo", "anal", "verga", "maldito", "idiota", "down", "nebro"
-  ];
+    "sexo", "anal", "verga", "maldito", "idiota", "down", "nebro", "negrito", "cholo", "putita", "putito", "pendejito", "pendejita", "gilipollas",
+    "gilipollita", "gilipollito", "cabrón", "guatemala", "guatemaleño", "guatemaleña", "chupapollas", "chupapollito", "chupapollita", "chupapolla", "pajero", "pajera", "pajerito", "pajerita",
+    "pajerillos", "pajerillas"
+    ];
 
-let isDragging = false;
-let offsetX, offsetY;
+    let isDragging = false;
+    let offsetX, offsetY;
 
-hud.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  offsetX = e.clientX - hud.getBoundingClientRect().left;
-  offsetY = e.clientY - hud.getBoundingClientRect().top;
-});
+    hud.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e.clientX - hud.getBoundingClientRect().left;
+      offsetY = e.clientY - hud.getBoundingClientRect().top;
+    });
 
-document.addEventListener("mousemove", (e) => {
-  if (isDragging) {
-    hud.style.left = `${e.clientX - offsetX}px`;
-    hud.style.top = `${e.clientY - offsetY}px`;
-    hud.style.right = "auto";
-    hud.style.bottom = "auto";
-  }
-});
-
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-});
-
-
-  let clean = text;
-  badWords.forEach(word => {
-    const regex = new RegExp(`\\b${word}\\b`, 'gi');
-    clean = clean.replace(regex, '*'.repeat(word.length));
-  });
-
-  return clean;
-}
-
-
-    chatInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && chatInput.value.trim()) {
-        const msg = censor(chatInput.value.trim());
-        const msgElem = document.createElement("div");
-        msgElem.textContent = "You: " + msg;
-        chatLog.appendChild(msgElem);
-        chatInput.value = "";
-        chatLog.scrollTop = chatLog.scrollHeight;
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        hud.style.left = `${e.clientX - offsetX}px`;
+        hud.style.top = `${e.clientY - offsetY}px`;
+        hud.style.right = "auto";
+        hud.style.bottom = "auto";
       }
     });
 
-    const emoteBox = document.createElement("div");
-emoteBox.id = "emote-box";
-hud.appendChild(emoteBox); // ahora está dentro del HUD
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
 
-window.addEventListener('send-emote', (e) => {
+
+    let clean = text;
+    badWords.forEach(word => {
+      const regex = new RegExp(`\\b${word}\\b`, 'gi');
+      clean = clean.replace(regex, '*'.repeat(word.length));
+    });
+
+    return clean;
+  }
+
+
+  chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && chatInput.value.trim()) {
+      const msg = censor(chatInput.value.trim());
+      const msgElem = document.createElement("div");
+      msgElem.textContent = "You: " + msg;
+      chatLog.appendChild(msgElem);
+      chatInput.value = "";
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+  });
+
+  const emoteBox = document.createElement("div");
+  emoteBox.id = "emote-box";
+  hud.appendChild(emoteBox); // ahora está dentro del HUD
+
+  window.addEventListener('send-emote', (e) => {
   const img = document.createElement("img");
   img.src = chrome.runtime.getURL(`emotes/${e.detail}.png`);
   img.className = "emote";
   emoteBox.appendChild(img);
   setTimeout(() => img.remove(), 3000);
-});
+  });
 
 
-    sendButton.addEventListener("click", () => {
+  sendButton.addEventListener("click", () => {
   if (chatInput.value.trim()) {
     const msg = censor(chatInput.value.trim());
     const msgElem = document.createElement("div");
@@ -240,21 +244,21 @@ window.addEventListener('send-emote', (e) => {
 });
 
 
-    [emote1, emote2].forEach(img => {
-  img.onclick = () => {
-    const emote = img.dataset.emote;
+  [emote1, emote2].forEach(img => {
+    img.onclick = () => {
+      const emote = img.dataset.emote;
 
-    // Emitir evento local
-    window.dispatchEvent(new CustomEvent('send-emote', { detail: emote }));
+      // Emitir evento local
+      window.dispatchEvent(new CustomEvent('send-emote', { detail: emote }));
 
-    // Mostrar emote flotante
-    const imgEl = document.createElement("img");
-    imgEl.src = chrome.runtime.getURL(`emotes/${emote}.png`);
-    imgEl.className = "emote";
-    document.body.appendChild(imgEl);
-    setTimeout(() => imgEl.remove(), 3000);
-  };
-});
+      // Mostrar emote flotante
+      const imgEl = document.createElement("img");
+      imgEl.src = chrome.runtime.getURL(`emotes/${emote}.png`);
+      imgEl.className = "emote";
+      document.body.appendChild(imgEl);
+      setTimeout(() => imgEl.remove(), 3000);
+    };
+  });
 
 
     console.log("✅ HUD insertado en el DOM (Ya debería de aparecer pibe que está chequeando la consola)");
